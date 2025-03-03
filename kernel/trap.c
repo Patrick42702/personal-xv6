@@ -33,6 +33,7 @@ idtinit(void)
 }
 
 //PAGEBREAK: 41
+uint c = 0;
 void
 trap(struct trapframe *tf)
 {
@@ -51,6 +52,10 @@ trap(struct trapframe *tf)
     if(cpuid() == 0){
       acquire(&tickslock);
       ticks++;
+      if (ticks % 1000 == 0){
+        c++;
+        cprintf("Approximately 1 second has passed, iteration %d\n", c);
+      }
       wakeup(&ticks);
       release(&tickslock);
     }
